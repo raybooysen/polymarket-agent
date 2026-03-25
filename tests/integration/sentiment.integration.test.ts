@@ -26,4 +26,19 @@ describe('Sentiment Integration', () => {
     const snapshot = await computeSentiment({ noCache: true });
     expect(snapshot.marketCount).toBeGreaterThanOrEqual(0);
   });
+
+  it('returns non-zero markets (verifies closed markets are excluded)', { timeout: 30000 }, async () => {
+    const snapshot = await computeSentiment({ noCache: true, minVolume: 0 });
+    expect(snapshot.marketCount).toBeGreaterThan(0);
+    expect(snapshot.signals.length).toBeGreaterThan(0);
+  });
+
+  it('signals only contain non-closed markets with real prices', { timeout: 30000 }, async () => {
+    const snapshot = await computeSentiment({ noCache: true, minVolume: 0 });
+    for (const signal of snapshot.signals) {
+      // Every signal should have a non-zero yes or no price (not both 0 like resolved markets)
+      expect(signal.yesPrice + signal.noPrice).toBeGreaterThan(0);
+      expect(signal.url).toContain('polymarket.com');
+    }
+  });
 });

@@ -6,12 +6,14 @@ const BASE_URL = 'https://gamma-api.polymarket.com';
 export async function getMarkets(params?: {
   limit?: number;
   active?: boolean;
+  closed?: boolean;
   order?: string;
   ascending?: boolean;
 }): Promise<GammaMarket[]> {
   const searchParams = new URLSearchParams();
   if (params?.limit !== undefined) searchParams.set('limit', String(params.limit));
   if (params?.active !== undefined) searchParams.set('active', String(params.active));
+  if (params?.closed !== undefined) searchParams.set('closed', String(params.closed));
   if (params?.order) searchParams.set('order', params.order);
   if (params?.ascending !== undefined) searchParams.set('ascending', String(params.ascending));
 

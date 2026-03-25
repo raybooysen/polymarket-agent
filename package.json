@@ -4,6 +4,10 @@
   "description": "Polymarket prediction market sentiment for AI trading agents",
   "bin": { "polymarket": "./dist/index.js" },
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/raybooysen/polymarket-agent"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",

@@ -82,7 +82,7 @@ export async function computeSentiment(options?: {
 }
 
 async function computeFresh(minVolume?: number): Promise<SentimentSnapshot> {
-  const rawMarkets = await getMarkets({ active: true, limit: 500 });
+  const rawMarkets = await getMarkets({ active: true, closed: false, order: 'volume24hr', ascending: false, limit: 500 });
   const signals = filterRelevantMarkets(rawMarkets, minVolume);
   const composites = computeComposites(signals);
 

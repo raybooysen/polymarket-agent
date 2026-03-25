@@ -26,13 +26,21 @@ function mockResponse(data: unknown, status = 200): Response {
 describe('getMarkets', () => {
   it('calls correct URL with params', async () => {
     mockFetch.mockResolvedValue(mockResponse([]));
-    await getMarkets({ limit: 10, active: true, order: 'volume24hr', ascending: false });
+    await getMarkets({ limit: 10, active: true, closed: false, order: 'volume24hr', ascending: false });
     const url = mockFetch.mock.calls[0][0] as string;
     expect(url).toContain('gamma-api.polymarket.com/markets');
     expect(url).toContain('limit=10');
     expect(url).toContain('active=true');
+    expect(url).toContain('closed=false');
     expect(url).toContain('order=volume24hr');
     expect(url).toContain('ascending=false');
+  });
+
+  it('omits closed param when not specified', async () => {
+    mockFetch.mockResolvedValue(mockResponse([]));
+    await getMarkets({ limit: 5, active: true });
+    const url = mockFetch.mock.calls[0][0] as string;
+    expect(url).not.toContain('closed');
   });
 
   it('returns parsed market array', async () => {

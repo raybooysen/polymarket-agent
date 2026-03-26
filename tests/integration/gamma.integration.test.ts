@@ -28,4 +28,19 @@ describe('Gamma API Integration', () => {
     expect(Array.isArray(results)).toBe(true);
     expect(results.length).toBeGreaterThan(0);
   });
+
+  it('closed=false excludes resolved markets', { timeout: 30000 }, async () => {
+    const markets = await getMarkets({ limit: 20, active: true, closed: false });
+    for (const market of markets) {
+      expect(market.closed).toBe(false);
+    }
+  });
+
+  it('volume sort returns highest-volume markets first', { timeout: 30000 }, async () => {
+    const markets = await getMarkets({ limit: 10, active: true, closed: false, order: 'volume24hr', ascending: false });
+    expect(markets.length).toBeGreaterThan(0);
+    for (let i = 1; i < markets.length; i++) {
+      expect(markets[i - 1].volume24hr).toBeGreaterThanOrEqual(markets[i].volume24hr);
+    }
+  });
 });

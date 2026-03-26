@@ -23,6 +23,9 @@ program
       const pretty = program.opts().pretty as boolean;
       const raw = await getMarkets({
         active: true,
+        closed: false,
+        order: 'volume24hr',
+        ascending: false,
         limit: parseInt(opts.limit as string, 10),
       });
       const signals = filterRelevantMarkets(raw, parseInt(opts.minVolume as string, 10));

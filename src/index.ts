@@ -81,6 +81,9 @@ program
       const pretty = program.opts().pretty as boolean;
       const events = await getEvents({
         active: true,
+        closed: false,
+        order: 'volume24hr',
+        ascending: false,
         limit: parseInt(opts.limit as string, 10),
       });
       process.stdout.write(formatOutput(events, pretty) + '\n');

@@ -43,4 +43,28 @@ describe('Gamma API Integration', () => {
       expect(markets[i - 1].volume24hr).toBeGreaterThanOrEqual(markets[i].volume24hr);
     }
   });
+
+  it('search returns only active non-closed markets', { timeout: 30000 }, async () => {
+    const results = await searchMarkets('iran', 5);
+    expect(results.length).toBeGreaterThan(0);
+    for (const market of results) {
+      expect(market.closed).toBe(false);
+    }
+  });
+
+  it('search results sorted by volume', { timeout: 30000 }, async () => {
+    const results = await searchMarkets('bitcoin', 10);
+    expect(results.length).toBeGreaterThan(0);
+    for (let i = 1; i < results.length; i++) {
+      expect(results[i - 1].volume24hr).toBeGreaterThanOrEqual(results[i].volume24hr);
+    }
+  });
+
+  it('events with closed=false returns only active events', { timeout: 30000 }, async () => {
+    const events = await getEvents({ limit: 5, active: true, closed: false, order: 'volume24hr', ascending: false });
+    expect(events.length).toBeGreaterThan(0);
+    for (const event of events) {
+      expect(event.closed).toBe(false);
+    }
+  });
 });

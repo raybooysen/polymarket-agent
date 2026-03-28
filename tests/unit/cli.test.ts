@@ -90,6 +90,7 @@ function runCli(args: string): string {
     return execSync(`${TSX} ${CLI_PATH} ${args}`, {
       encoding: 'utf-8',
       timeout: 30000,
+      maxBuffer: 10 * 1024 * 1024,
       cwd: path.resolve('.'),
     });
   } catch (err) {
